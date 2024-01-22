@@ -1,6 +1,6 @@
 
 -- +migrate Up
-CREATE TABLE "events" (
+CREATE TABLE "venues" (
   "id" SERIAL PRIMARY KEY,
   "name" VARCHAR(255) NOT NULL,
   "created_at" timestamp NOT NULL,
@@ -8,4 +8,4 @@ CREATE TABLE "events" (
 );
 
 -- +migrate Down
-DROP TABLE "events";
+DROP TABLE "venues";

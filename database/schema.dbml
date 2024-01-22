@@ -1,0 +1,139 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table events {
+  id SERIAL [pk]
+  name VARCHAR(255) [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+
+  Note {
+    'Master table for aggregate all data of the event'
+  }
+}
+
+Table venues {
+  id SERIAL [pk]
+  name VARCHAR(255) [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+
+  Note {
+    'Master table for venue'
+  }
+}
+
+Table event_dates {
+  id SERIAL [pk]
+  event_id integer [not null]
+  date date [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+
+  Note {
+    'Aggregate table about data that is a single day of the event.
+    Some event has several date.'
+  }
+}
+Ref: events.id < event_dates.event_id
+
+Table event_venues {
+  id SERIAL [pk]
+  event_date_id integer [not null]
+  venue_id integer [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+
+  Note {
+    'Venue of event date'
+  }
+}
+Ref: event_dates.id < event_venues.event_date_id
+Ref: venues.id < event_venues.venue_id
+
+Table performers {
+  id SERIAL [pk]
+  name VARCHAR(255) [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+
+  Note {
+    'Master table for performer'
+  }
+}
+
+Table event_performers {
+  id SERIAL [pk]
+  event_id integer [not null]
+  performer_id integer [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+
+  Note {
+    'Connect tables of event and performer.
+    This table does not control which performers appear on which dates and venues of the event.'
+  }
+}
+Ref: events.id < event_performers.event_id
+Ref: performers.id < event_performers.performer_id
+
+Table event_schedules {
+  id SERIAL [pk]
+  event_date_id integer [not null]
+  type event_schedule_types [not null]
+  start_at timestamp [not null]
+  end_at timestamp
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+
+  Note {
+    'Time schedule of what will happen at which venues and when at the event'
+  }
+}
+Enum event_schedule_types {
+  open
+  start
+  finish
+  close
+  timetable
+  other
+}
+Ref: event_dates.id < event_schedules.event_date_id
+
+Table event_performer_schedules {
+  id SERIAL [pk]
+  event_schedule_id integer [not null]
+  event_performer_id integer [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+
+  Note {
+    'The performer is appered which event_schedule.
+    This table connects only event_schedules that has timetable type.'
+  }
+}
+Ref: event_performers.id < event_performer_schedules.event_performer_id
+Ref: event_schedules.id < event_performer_schedules.event_schedule_id
+
+Table event_tickets {
+  id SERIAL [pk]
+  event_id integer [not null]
+  type event_ticket_types [not null]
+  name VARCHAR(255)
+  price integer [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+
+  Note {
+    'Event ticket table.
+    Some event has many type of ticket.'
+  }
+}
+Enum event_ticket_types {
+  adv
+  door
+  other
+}
+Ref: events.id < event_tickets.event_id
+
+
