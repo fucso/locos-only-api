@@ -3,8 +3,9 @@ package main
 import (
 	"net/http"
 
+	"github.com/fucso/locos-only-api/src/controller"
 	"github.com/fucso/locos-only-api/src/infrastructure"
-	"github.com/fucso/locos-only-api/src/repository"
+	"github.com/fucso/locos-only-api/src/router"
 	"github.com/fucso/locos-only-api/src/usecase"
 	"github.com/labstack/echo/v4"
 )
@@ -16,18 +17,13 @@ func main() {
 		e.Logger.Fatal(err)
 	}
 
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, world!")
+	router.InitEventRouter(e, func() *controller.EventController {
+		usecase := usecase.NewEventUsecase(db)
+		return controller.NewEventController(usecase)
 	})
 
-	e.GET("/events", func(c echo.Context) error {
-		repo := repository.NewEventRepository(db)
-		usecase := usecase.NewEventUsecase(repo)
-		events, err := usecase.FindAll()
-		if err != nil {
-			return c.String(http.StatusInternalServerError, err.Error())
-		}
-		return c.JSON(http.StatusOK, events)
+	e.GET("/", func(c echo.Context) error {
+		return c.String(http.StatusOK, "Hello, world!")
 	})
 
 	e.Logger.Fatal(e.Start(":8080"))

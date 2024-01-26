@@ -2,19 +2,20 @@ package usecase
 
 import (
 	"github.com/fucso/locos-only-api/src/domain"
+	"github.com/fucso/locos-only-api/src/infrastructure"
 	"github.com/fucso/locos-only-api/src/repository"
 )
 
 type EventUsecase struct {
-	EventRepository *repository.EventRepository
+	repo *repository.EventRepository
 }
 
-func NewEventUsecase(repo *repository.EventRepository) *EventUsecase {
+func NewEventUsecase(Database *infrastructure.Database) *EventUsecase {
 	return &EventUsecase{
-		EventRepository: repo,
+		repo: repository.NewEventRepository(Database),
 	}
 }
 
 func (usecase *EventUsecase) FindAll() ([]*domain.Event, error) {
-	return usecase.EventRepository.FindAll()
+	return usecase.repo.FindAll()
 }
