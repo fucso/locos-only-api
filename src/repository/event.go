@@ -3,7 +3,7 @@ package repository
 import (
 	"github.com/doug-martin/goqu/v9"
 
-	"github.com/fucso/locos-only-api/src/domain"
+	"github.com/fucso/locos-only-api/src/domain/event"
 	"github.com/fucso/locos-only-api/src/infrastructure"
 )
 
@@ -17,14 +17,14 @@ func NewEventRepository(db *infrastructure.Database) *EventRepository {
 	}
 }
 
-func (repo *EventRepository) FindAll() ([]*domain.Event, error) {
+func (repo *EventRepository) FindAll() ([]*event.Event, error) {
 	ds := goqu.Select("id", "name").From("events")
 	rows, err := repo.Database.Select(ds)
 	if err != nil {
 		return nil, err
 	}
 
-	var events []*domain.Event
+	var events []*event.Event
 	for rows.Next() {
 		var (
 			id   int
@@ -35,10 +35,11 @@ func (repo *EventRepository) FindAll() ([]*domain.Event, error) {
 			return nil, err
 		}
 
-		event, err := domain.NewEvent(id, name)
+		event, err := event.NewEventBuilder().ID(id).Name(name).Build()
 		if err != nil {
 			return nil, err
 		}
+
 		events = append(events, event)
 	}
 	return events, nil

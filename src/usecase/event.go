@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"github.com/fucso/locos-only-api/src/domain"
+	"github.com/fucso/locos-only-api/src/domain/event"
 	"github.com/fucso/locos-only-api/src/infrastructure"
 	"github.com/fucso/locos-only-api/src/repository"
 )
@@ -16,6 +16,6 @@ func NewEventUsecase(Database *infrastructure.Database) *EventUsecase {
 	}
 }
 
-func (usecase *EventUsecase) FindAll() ([]*domain.Event, error) {
+func (usecase *EventUsecase) FindAll() ([]*event.Event, error) {
 	return usecase.repo.FindAll()
 }
