@@ -1,5 +1,8 @@
-package params
+package eventParams
 
 type CreateRequest struct {
-	name string `json:"name"`
+	Name string `json:"name"`
+	// Dates []struct {
+	// 	Venue string `json:"venue"`
+	// } `json:"dates"`
 }

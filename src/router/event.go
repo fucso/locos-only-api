@@ -11,10 +11,12 @@ type Method string
 
 const (
 	FindAll Method = "FindAll"
+	Create  Method = "Create"
 )
 
 func InitEventRouter(e *echo.Echo, i initializer) {
 	e.GET("/events", handle(i, FindAll))
+	e.POST("/event", handle(i, Create))
 }
 
 func handle(i initializer, method Method) echo.HandlerFunc {
@@ -24,6 +26,8 @@ func handle(i initializer, method Method) echo.HandlerFunc {
 			switch method {
 			case FindAll:
 				return controller.FindAll()
+			case Create:
+				return controller.Create()
 			default:
 				return nil
 			}

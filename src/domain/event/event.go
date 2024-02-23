@@ -2,12 +2,18 @@ package event
 
 import (
 	"github.com/fucso/locos-only-api/src/domain/base"
+	"github.com/fucso/locos-only-api/src/domain/venue"
 )
 
 // Model
 type Event struct {
 	*base.Model
 	*base.Master
+	Dates []EventDate
+}
+
+type EventDate struct {
+	Venue venue.Venue
 }
 
 // Initializer
