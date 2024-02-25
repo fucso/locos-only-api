@@ -22,6 +22,11 @@ func main() {
 		return controller.NewEventController(usecase)
 	})
 
+	router.InitVenueRouter(e, func() *controller.VenueController {
+		usecase := usecase.NewVenueUsecase(db)
+		return controller.NewVenueController(usecase)
+	})
+
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, world!")
 	})

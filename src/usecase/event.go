@@ -11,9 +11,9 @@ type EventUsecase struct {
 	repo *repository.EventRepository
 }
 
-func NewEventUsecase(Database *infrastructure.Database) *EventUsecase {
+func NewEventUsecase(db *infrastructure.Database) *EventUsecase {
 	return &EventUsecase{
-		repo: repository.NewEventRepository(Database),
+		repo: repository.NewEventRepository(db),
 	}
 }
 
