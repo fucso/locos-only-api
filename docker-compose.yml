@@ -7,6 +7,7 @@ services:
       context: .
     volumes:
       - .:/app
+      - ./tmp/pkg:/go/pkg
     ports:
       - 8080:8080
     environment:
